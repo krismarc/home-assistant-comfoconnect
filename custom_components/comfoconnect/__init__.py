@@ -154,12 +154,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
         except (AioComfoConnectNotConnected, AioComfoConnectTimeout):
             # Reconnect when connection has been dropped
-            try:
-                await bridge.connect(entry.data[CONF_LOCAL_UUID])
-            except AioComfoConnectTimeout:
-                _LOGGER.debug("Connection timed out. Retrying later...")
-
-                # TODO: Mark all sensors as unavailable
+            _LOGGER.debug("Connection timed out. The library should reconnect...")
+            # TODO: Mark all sensors as unavailable
 
     entry.async_on_unload(
         async_track_time_interval(hass, send_keepalive, KEEP_ALIVE_INTERVAL)
